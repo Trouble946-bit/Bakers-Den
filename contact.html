@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us - Bakers Den</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png.png" alt="Bakers Den Logo" class="logo-img">
+      </a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="header-content">
+      <h1>Get In Touch</h1>
+      <p>Let's create something sweet together</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Contact Information</h2>
+          <div class="info-box">
+            <h3>📍 Location</h3>
+            <p>Blantyre, Malawi</p>
+          </div>
+          <div class="info-box">
+            <h3>📞 Phone</h3>
+            <p>+265 (999) 106 989</p>
+          </div>
+          <div class="info-box">
+            <h3>✉️ Email</h3>
+            <p><a href="mailto:bakersden@gmail.com">bakersden@gmail.com</a></p>
+          </div>
+          <div class="info-box">
+            <h3>🕐 Hours</h3>
+            <p>Monday - Saturday: 7:00 AM - 7:00 PM<br>Sunday: 8:00 AM - 5:00 PM</p>
+          </div>
+          <div class="info-box">
+            <h3>📝 Order Notice</h3>
+            <p>Custom cakes require 3-5 days advance notice.<br>Regular items available daily.</p>
+          </div>
+        </div>
+
+        <form class="contact-form">
+          <h2>Place Your Order</h2>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+265 xxx xxx xxx" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email (Optional)</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div class="form-group">
+            <label for="item">Item/Cake Design</label>
+            <input type="text" id="item" name="item" placeholder="e.g., Chocolate Delight Cake" required />
+          </div>
+          <div class="form-group">
+            <label for="date">Needed By</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Special Requirements / Custom Design Details</label>
+            <textarea id="message" name="message" rows="6" placeholder="Describe your dream cake or any special requirements..."></textarea>
+          </div>
+          <button type="submit" class="submit-button">Send Order via WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Bakers Den. All rights reserved.</p>
+      <p>Crafting sweet memories, one cake at a time 🎂</p>
+    </div>
+  </footer>
+
+  <script>
+    // Pre-fill form from URL parameters
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const item = urlParams.get('item');
+      const price = urlParams.get('price');
+      
+      if (item) {
+        const itemField = document.getElementById('item');
+        const messageField = document.getElementById('message');
+        
+        itemField.value = item;
+        if (price && messageField.value === '') {
+          messageField.value = `I would like to order this item (MWK ${price}).\n\nPlease let me know about availability and delivery options.\n\nThank you!`;
+        }
+      }
+
+      // WhatsApp redirect on form submission
+      const contactForm = document.querySelector('.contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form values
+          const name = document.getElementById('name').value;
+          const phone = document.getElementById('phone').value;
+          const email = document.getElementById('email').value;
+          const item = document.getElementById('item').value;
+          const date = document.getElementById('date').value;
+          const message = document.getElementById('message').value;
+          
+          // Format phone number for WhatsApp
+          const phoneNumber = '265999106989'; // +265 (999) 106 989
+          
+          // Construct WhatsApp message
+          let whatsappMessage = `*NEW ORDER - Bakers Den*\n\n`;
+          whatsappMessage += `*Customer:* ${name}\n`;
+          whatsappMessage += `*Phone:* ${phone}\n`;
+          if (email) whatsappMessage += `*Email:* ${email}\n`;
+          whatsappMessage += `*Item:* ${item}\n`;
+          whatsappMessage += `*Needed By:* ${date}\n\n`;
+          if (message) whatsappMessage += `*Special Requirements:*\n${message}`;
+          
+          // Encode message for URL
+          const encodedMessage = encodeURIComponent(whatsappMessage);
+          
+          // Create WhatsApp URL
+          const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+          
+          // Open WhatsApp in new tab
+          window.open(whatsappURL, '_blank');
+        });
+      }
+
+      // Set minimum date to tomorrow
+      const dateInput = document.getElementById('date');
+      if (dateInput) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const minDate = tomorrow.toISOString().split('T')[0];
+        dateInput.setAttribute('min', minDate);
+      }
+    });
+  </script>
+</body>
+</html>
